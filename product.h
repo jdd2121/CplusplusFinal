@@ -23,6 +23,7 @@ public:
 	void decreaseStock(int x);
 
 	void const listProduct();
+	void const listInv(int x);
 	std::string const getName();
 	double const getPrice();
 	int const getStock();

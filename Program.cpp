@@ -3,11 +3,16 @@
 #include <string>
 #include<iomanip>
 #include"product.h"
+#include <fstream>
+#include <vector>
 
 void random() {
 
 }
 
+void printReceipt() {
+
+}
 
 int main()
 {
@@ -22,9 +27,8 @@ int main()
     for (int i = 0;i < 3;i++) {
         products[i].product::product();
     }
-    for (int i = 0;i < 3;i++) {
-        products[i].listProduct();
-    }
+    products->listInv(std::size(products));
+    //use line above to display all products in the array :)
 
     return 0;
 }

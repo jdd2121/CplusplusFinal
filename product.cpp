@@ -63,3 +63,10 @@ const int product::getStock() {
 const void product::listProduct() {
 	std::cout << getName() << "\t\t$" << getPrice() << "\tStock:" << getStock() << std::endl;
 }
+
+const void product::listInv(int x) {
+
+	for (int i = 0;i < x;i++) {
+		this[i].listProduct();
+	}
+}
