@@ -57,10 +57,31 @@ void view_cart(std::vector<product>& cart, const double total_price) {
     for (int i = 0; i < cart.size(); i++) {
         std::cout << std::fixed << std::setprecision(2) << cart[i].getName() << " ($" << cart[i].getPrice() << ")" << std::endl;
     }
+
+    std::cout << "Do you want to sort your cart? (y/n): ";
+    std::string input;
+    std::getline(std::cin, input);
+    if (input == "y") {
+        for (int i = 0; i < cart.size(); i++) {
+            int max_index = i;
+            for (int j = i + 1; j < cart.size(); j++) {
+                if (cart[j].getPrice() > cart[max_index].getPrice()) {
+                    max_index = j;
+                }
+            }
+
+            if (i != max_index) {
+                product temp = cart[i];
+                cart[i] = cart[max_index];
+                cart[max_index] = temp;
+            }
+        }
+    }
+    std::cout << "Cart sorted!" << std::endl;
 }
 
 void print_receipt(std::vector<product>& cart, const double total_price) {
-    std::ofstream receipt("receipt.txt",std::ios::app);
+    std::ofstream receipt("receipt.txt");
     std::cout << "Thanks for shopping at our store, here's your receipt!" << std::endl;
 
     for (int i = 0; i < cart.size(); i++) {
@@ -83,42 +104,42 @@ void print_receipt(std::vector<product>& cart, const double total_price) {
 }
 
 void intializeInv(product* Inventory) {
-std::ifstream inv("inventory.txt");
-std::string x;
-std::string word;
-std::string name;
-double price;
-int stock;
-int ID;
-int lineCount=0;
-while (std::getline(inv, x)) {
-    lineCount++;
-}
-lineCount--;
-inv.close();
-std::ifstream y("inventory.txt");
-if(y.is_open()){
-std::getline(y,x);
-    for(int i = 0;i<lineCount;i++ ){
-    try {
-y>>name;
-y>>word;
-price = std::stod(word);
-y>>word;
-stock = std::stoi(word);
-y>>word;
-ID=std::stoi(word);
-}
-catch (std::exception& e) {
-    throw std::exception("inventory.txt is not formated correctly");
-}
-Inventory[i].setName(name);
-Inventory[i].setPrice(price);
-Inventory[i].setStock(stock);
-Inventory[i].setID(ID);
-}
+    std::ifstream inv("inventory.txt");
+    std::string x;
+    std::string word;
+    std::string name;
+    double price;
+    int stock;
+    int ID;
+    int lineCount=0;
+    while (std::getline(inv, x)) {
+        lineCount++;
+    }
+    lineCount--;
+    inv.close();
+    std::ifstream y("inventory.txt");
+    if(y.is_open()){
+        std::getline(y,x);
+            for(int i = 0;i<lineCount;i++ ){
+                try {
+                    y>>name;
+                    y>>word;
+                    price = std::stod(word);
+                    y>>word;
+                    stock = std::stoi(word);
+                    y>>word;
+                    ID=std::stoi(word);
+                   }
+                   catch (std::exception& e) {
+                       throw std::exception("inventory.txt is not formated correctly");
+                   }
+                Inventory[i].setName(name);
+                Inventory[i].setPrice(price);
+                Inventory[i].setStock(stock);
+                Inventory[i].setID(ID);
+            }
 
-}
+    }
 
 
 }
@@ -133,26 +154,14 @@ int main()
     }
     file.close();
     lineCount--;
-    //std::vector<product> products;
-    //intializeInv(products);
-    //just gonna add some common grocery store items
-    //we can add more in the future if need be
-    product* products = new product [lineCount];//{
-    //    product("banana", 0.30, 45, 1),
-    //    product("milk", 4.00, 40, 2),
-    //    product("bread", 2.25, 50, 3),
-    //    product("rice", 3.15, 35, 4),
-    //    product("chips", 3.75, 55, 5),
-    //    product("water", 1.50, 70, 6),
-    //    product("carrot", 0.40, 45, 7),
-    //    product("ham", 4.50, 60, 8),
-    //};
+    
+    product* products = new product [lineCount];
     try{
-    intializeInv(products);
+        intializeInv(products);
     }
     catch (std::exception e) {
     }
-    //resizable shopping cart for the user
+
     std::vector<product> cart;
     double total_price = 0;
 
@@ -169,25 +178,27 @@ int main()
             std::cout << e.what() << std::endl;
         }
 
-        if (choice == 1) {
+        switch (choice) {
+        case 1:
             std::cout << std::endl;
             add_item(products, 8, cart, total_price);
-        }
-        if (choice == 2) {
+            break;
+        case 2:
             std::cout << std::endl;
             view_cart(cart, total_price);
-        }
-        if (choice == 3) {
+            break;
+        case 3:
             std::cout << std::endl;
-          products->listInv(lineCount);
-        }
-        if (choice == 4) {
+            products->listInv(lineCount);
+            break;
+        case 4:
             std::cout << std::endl;
             print_receipt(cart, total_price);
-        }
-        if (choice == 5) {
+            break;
+        default:
             std::cout << std::endl;
             std::cout << "Goodbye!" << std::endl;
+            delete[] products;
             return 0;
         }
 
