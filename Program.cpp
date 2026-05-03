@@ -1,4 +1,3 @@
-//Our program file for this project
 #include <iostream>
 #include <string>
 #include<iomanip>
