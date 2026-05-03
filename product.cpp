@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
 #include "product.h"
 
 product::product(std::string name, double price, int stock, int ID) {
@@ -61,7 +62,7 @@ const int product::getStock() {
 }
 
 const void product::listProduct() {
-	std::cout << getName() << "\t\t$" << getPrice() << "\tStock:" << getStock() << std::endl;
+	std::cout << std::fixed<<std::setprecision(2)<<getName() << "\t\t$" << getPrice() << "\tStock:" << getStock() << std::endl;
 }
 
 const void product::listInv(int x) {

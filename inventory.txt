@@ -1,0 +1,9 @@
+Name:		Price:		Stock:		ID: (Ingoring this format will cause problems)
+Banana		0.30		45			1
+Milk		4.00		40			2
+Bread		2.25		50			3
+Rice		3.15		55			4
+Chips		3.75		70			5
+Water		1.50		45			6
+Carrot		0.40		45			7
+Ham			4.50		60			8

@@ -55,34 +55,103 @@ void view_cart(std::vector<product>& cart, const double total_price) {
     }
 
     for (int i = 0; i < cart.size(); i++) {
-        std::cout << cart[i].getName() << " ($" << cart[i].getPrice() << ")" << std::endl;
+        std::cout << std::fixed << std::setprecision(2) << cart[i].getName() << " ($" << cart[i].getPrice() << ")" << std::endl;
     }
 }
 
 void print_receipt(std::vector<product>& cart, const double total_price) {
+    std::ofstream receipt("receipt.txt",std::ios::app);
     std::cout << "Thanks for shopping at our store, here's your receipt!" << std::endl;
 
     for (int i = 0; i < cart.size(); i++) {
         std::cout << cart[i].getName() << " ($" << cart[i].getPrice() << ")" << std::endl;
     }
     std::cout << "Total: $" << total_price << std::endl;
+   
+   receipt<< "Thanks for shopping at our store, here's your receipt!" << std::endl;
+
+    for (int i = 0; i < cart.size(); i++) {
+        receipt << cart[i].getName() << " ($" << cart[i].getPrice() << ")" << std::endl;
+    }
+    receipt << "Total: $" << total_price << std::endl;
+    receipt<<"Thank you for shopping at Totally Real Company Inc. have a good day!"<<std::endl;
+    receipt.close();
+
+    std::cout<<"A copy of your receipt will be in the file receipt.txt"<<std::endl;
+
+
+}
+
+void intializeInv(product* Inventory) {
+std::ifstream inv("inventory.txt");
+std::string x;
+std::string word;
+std::string name;
+double price;
+int stock;
+int ID;
+int lineCount=0;
+while (std::getline(inv, x)) {
+    lineCount++;
+}
+lineCount--;
+inv.close();
+std::ifstream y("inventory.txt");
+if(y.is_open()){
+std::getline(y,x);
+    for(int i = 0;i<lineCount;i++ ){
+    try {
+y>>name;
+y>>word;
+price = std::stod(word);
+y>>word;
+stock = std::stoi(word);
+y>>word;
+ID=std::stoi(word);
+}
+catch (std::exception& e) {
+    throw std::exception("inventory.txt is not formated correctly");
+}
+Inventory[i].setName(name);
+Inventory[i].setPrice(price);
+Inventory[i].setStock(stock);
+Inventory[i].setID(ID);
+}
+
+}
+
+
 }
 
 int main()
 {
+    std::ifstream file("inventory.txt");
+    int lineCount = 0;
+    std::string dummyString;
+    while (std::getline(file, dummyString)) {
+        lineCount++;
+    }
+    file.close();
+    lineCount--;
+    //std::vector<product> products;
+    //intializeInv(products);
     //just gonna add some common grocery store items
     //we can add more in the future if need be
-    product products[8]{
-        product("banana", 0.30, 45, 1),
-        product("milk", 4.00, 40, 2),
-        product("bread", 2.25, 50, 3),
-        product("rice", 3.15, 35, 4),
-        product("chips", 3.75, 55, 5),
-        product("water", 1.50, 70, 6),
-        product("carrot", 0.40, 45, 7),
-        product("ham", 4.50, 60, 8),
-    };
-    
+    product* products = new product [lineCount];//{
+    //    product("banana", 0.30, 45, 1),
+    //    product("milk", 4.00, 40, 2),
+    //    product("bread", 2.25, 50, 3),
+    //    product("rice", 3.15, 35, 4),
+    //    product("chips", 3.75, 55, 5),
+    //    product("water", 1.50, 70, 6),
+    //    product("carrot", 0.40, 45, 7),
+    //    product("ham", 4.50, 60, 8),
+    //};
+    try{
+    intializeInv(products);
+    }
+    catch (std::exception e) {
+    }
     //resizable shopping cart for the user
     std::vector<product> cart;
     double total_price = 0;
@@ -110,7 +179,7 @@ int main()
         }
         if (choice == 3) {
             std::cout << std::endl;
-            products->listInv(std::size(products));
+          products->listInv(lineCount);
         }
         if (choice == 4) {
             std::cout << std::endl;
@@ -124,6 +193,8 @@ int main()
 
         std::cout << std::endl;
     }
+
+    delete[] products;
 
     return 0;
 }
